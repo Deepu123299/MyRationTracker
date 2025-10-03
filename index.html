@@ -1,0 +1,314 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ration Shop Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #2b7a78;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    .container {
+      max-width: 600px;
+      margin: 2rem auto;
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    label, input, button {
+      display: block;
+      width: 100%;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+    input, button {
+      padding:…
+[5:09 PM, 10/2/2025] deepustanding: <!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ration Shop Tracker</title>
+  <style>
+    :root{--bg:#f6f8fb;--card:#ffffff;--muted:#6b7280;--accent:#0ea5a4}
+    body{font-family:Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background:var(--bg); margin:0; padding:2rem}
+    .container{max-width:980px;margin:0 auto}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
+    h1{font-size:1.25rem;margin:0}
+    .card{background:var(--card);border-radius:12px;padding:1rem;box-shadow:0 6px 18px rgba(9,10,11,0.06)}
+    .controls{display:flex;gap:.5rem;align-items:center}
+    [5:09 PM, 10/2/2025] deepustanding: input[type=text], input[type=number], input[type=datetime-local], select{padding:.5rem .6rem;border-radius:8px;border:1px solid #e6e9ef}
+    button{padding:.5rem .75rem;border-radius:8px;border:0;background:var(--accent);color:#fff;cursor:pointer}
+    table{width:100%;border-collapse:collapse;margin-top:1rem}
+    th,td{padding:.6rem .5rem;text-align:left;border-bottom:1px solid #eef2f6}
+    th{font-size:.85rem;color:var(--muted)}
+    .status{display:inline-block;padding:.25rem .5rem;border-radius:999px;font-weight:600;font-size:.8rem}
+    .open{background:rgba(16,185,129,0.12);color:#059669}
+    .closed{background:rgba(239,68,68,0.08);color:#dc2626}
+    .muted{color:var(--muted);font-size:.9rem}
+    .form-row{display:flex;gap:.5rem;margin-top:.75rem}
+    .small{width:110px}
+    .right{margin-left:auto}
+    @media (max-width:720px){.form-row{flex-direction:column}.small{width:100%}.controls{flex-direction:column;align-items:stretch}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Ration Shop Tracker</h1>
+      <div class="muted">Local time: <span id="nowLabel">--:--</span></div>
+    </header><section class="card">
+  <div style="display:flex;gap:.75rem;align-items:center;flex-wrap:wrap">
+    <div class="controls">
+      <input id="searchInput" type="text" placeholder="Search shop name..." />
+      <select id="filterStatus">
+        <option value="all">All</option>
+        <option value="open">Open now</option>
+        <option value="closed">Closed now</option>
+      </select>
+    </div>
+    <div class="right">
+      <button id="refreshBtn">Refresh</button>
+    </div>
+  </div>
+
+  <table id="shopsTable" aria-label="Ration shops">
+    <thead>
+      <tr>
+        <th>Shop name</th>
+        <th>People waiting</th>
+        <th>Next open date/time</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <hr style="margin-top:1rem;border:none;border-top:1px solid #f1f3f6" />
+
+  <div style="margin-top:.75rem">
+    <strong>Add / Edit shop</strong>
+    <div class="form-row">
+      <input id="shopName" type="text" placeholder="Shop name" />
+      <input id="peopleCount" type="number" min="0" placeholder="People waiting" class="small" />
+      <input id="nextOpen" type="datetime-local" class="small" />
+      <select id="isOpenNow" class="small">
+        <option value="">Auto (based on schedule)</option>
+        <option value="open">Force Open</option>
+        <option value="closed">Force Closed</option>
+      </select>
+      <button id="addBtn">Add / Update</button>
+    </div>
+    <div class="muted" style="margin-top:.5rem">Tip: For automatic open/close, leave the status blank and set the next open date/time.</div>
+  </div>
+</section>
+
+  </div>  <script>
+    // Sample data — replace with real API data later
+    let shops = [
+      { id: 1, name: 'Muthu Ration Shop', people: 12, nextOpen: '2025-10-02T09:30', forceStatus: '' },
+      { id: 2, name: 'Kumar Provision', people: 4, nextOpen: '2025-10-03T10:00', forceStatus: '' },
+      { id: 3, name: 'Lakshmi …
+[5:17 PM, 10/2/2025] deepustanding: <!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ration Shop Tracker</title>
+  <style>
+    :root{--bg:#f6f8fb;--card:#ffffff;--muted:#6b7280;--accent:#0ea5a4}
+    body{font-family:Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background:var(--bg); margin:0; padding:2rem}
+    .container{max-width:980px;margin:0 auto}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
+    h1{font-size:1.25rem;margin:0}
+    .card{background:var(--card);border-radius:12px;padding:1rem;box-shadow:0 6px 18px rgba(9,10,11,0.06)}
+    .controls{display:flex;gap:.5rem;align-items:center}
+    input[type=text], input[type=number], input[type=datetime-local], select{padding:.5rem .6rem;border-radius:8px;border:1px solid #e6e9ef}
+    button{padding:.5rem .75rem;border-radius:8px;border:0;background:var(--accent);color:#fff;cursor:pointer}
+    table{width:100%;border-collapse:collapse;margin-top:1rem}
+    th,td{padding:.6rem .5rem;text-align:left;border-bottom:1px solid #eef2f6}
+    th{font-size:.85rem;color:var(--muted)}
+    .status{display:inline-block;padding:.25rem .5rem;border-radius:999px;font-weight:600;font-size:.8rem}
+    .open{background:rgba(16,185,129,0.12);color:#059669}
+    .closed{background:rgba(239,68,68,0.08);color:#dc2626}
+    .muted{color:var(--muted);font-size:.9rem}
+    .form-row{display:flex;gap:.5rem;margin-top:.75rem}
+    .small{width:110px}
+    .right{margin-left:auto}
+    @media (max-width:720px){.form-row{flex-direction:column}.small{width:100%}.controls{flex-direction:column;align-items:stretch}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Ration Shop Tracker</h1>
+      <div class="muted">Local time: <span id="nowLabel">--:--</span></div>
+    </header><section class="card">
+  <div style="display:flex;gap:.75rem;align-items:center;flex-wrap:wrap">
+    <div class="controls">
+      <input id="searchInput" type="text" placeholder="Search shop name..." />
+      <select id="filterStatus">
+        <option value="all">All</option>
+        <option value="open">Open now</option>
+        <option value="closed">Closed now</option>
+      </select>
+    </div>
+    <div class="right">
+      <button id="refreshBtn">Refresh</button>
+    </div>
+  </div>
+
+  <table id="shopsTable" aria-label="Ration shops">
+    <thead>
+      <tr>
+        <th>Shop name</th>
+        <th>People waiting</th>
+        <th>Next open date/time</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <hr style="margin-top:1rem;border:none;border-top:1px solid #f1f3f6" />
+
+  <div style="margin-top:.75rem">
+    <strong>Add / Edit shop</strong>
+    <div class="form-row">
+      <input id="shopName" type="text" placeholder="Shop name" />
+      <input id="peopleCount" type="number" min="0" placeholder="People waiting" class="small" />
+      <input id="nextOpen" type="datetime-local" class="small" />
+      <select id="isOpenNow" class="small">
+        <option value="">Auto (based on schedule)</option>
+        <option value="open">Force Open</option>
+        <option value="closed">Force Closed</option>
+      </select>
+      <button id="addBtn">Add / Update</button>
+    </div>
+    <div class="muted" style="margin-top:.5rem">Tip: For automatic open/close, leave the status blank and set the next open date/time.</div>
+  </div>
+</section>
+
+  </div>  <script>
+    // Sample data — replace with real API data later
+    let shops = [
+      { id: 1, name: 'Muthu Ration Shop', people: 12, nextOpen: '2025-10-02T09:30', forceStatus: '' },
+      { id: 2, name: 'Kumar Provision', people: 4, nextOpen: '2025-10-03T10:00', forceStatus: '' },
+       { id: 3, name: 'Lakshmi Store', people: 0, nextOpen: '2025-10-02T00:00', forceStatus: 'open' }
+    ];
+
+    const tbody = document.querySelector('#shopsTable tbody');
+    const nowLabel = document.getElementById('nowLabel');
+
+    function updateNowLabel(){
+      const now = new Date();
+      nowLabel.textContent = now.toLocaleString();
+    }
+
+    function computeStatus(shop){
+      // If user forced status, respect it
+      if(shop.forceStatus === 'open') return { text: 'Open', open: true };
+      if(shop.forceStatus === 'closed') return { text: 'Closed', open: false };
+
+      const now = new Date();
+      if(!shop.nextOpen) return { text: 'Unknown', open: false };
+      const next = new Date(shop.nextOpen);
+
+      // If nextOpen is in the past or now, treat as open; otherwise closed.
+      if(next.getTime() <= now.getTime()) return { text: 'Open', open: true };
+      // If nextOpen in future, show when it will open and mark closed
+      return { text: 'Will open ' + next.toLocaleString(), open: false };
+    }
+
+    function render(){
+      tbody.innerHTML = '';
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const filter = document.getElementById('filterStatus').value;
+
+      shops.forEach(shop => {
+        if(search && !shop.name.toLowerCase().includes(search)) return;
+        const status = computeStatus(shop);
+        if(filter === 'open' && !status.open) return;
+        if(filter === 'closed' && status.open) return;
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${escapeHtml(shop.name)}</td>
+          <td>${shop.people}</td>
+          <td>${shop.nextOpen ? new Date(shop.nextOpen).toLocaleString() : '<span class="muted">Not set</span>'}</td>
+          <td><span class="status ${status.open ? 'open' : 'closed'}">${escapeHtml(status.text)}</span></td>
+          <td>
+            <button data-id="${shop.id}" class="editBtn">Edit</button>
+            <button data-id="${shop.id}" class="delBtn">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, function(ch){
+        return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[ch];
+      });
+    }
+
+    document.getElementById('refreshBtn').addEventListener('click', () => { updateNowLabel(); render(); });
+    document.getElementById('searchInput').addEventListener('input', render);
+    document.getElementById('filterStatus').addEventListener('change', render);
+
+    document.getElementById('addBtn').addEventListener('click', () => {
+      const name = document.getElementById('shopName').value.trim();
+      const people = parseInt(document.getElementById('peopleCount').value || '0', 10);
+      const nextOpen = document.getElementById('nextOpen').value || '';
+      const force = document.getElementById('isOpenNow').value || '';
+      if(!name){ alert('Enter shop name'); return; }
+
+      // If shop exists, update; else create
+       const existing = shops.find(s => s.name.toLowerCase() === name.toLowerCase());
+      if(existing){ existing.people = people; existing.nextOpen = nextOpen; existing.forceStatus = force; }
+      else{ shops.push({ id: Date.now(), name, people, nextOpen, forceStatus: force }); }
+
+      // Clear form
+      document.getElementById('shopName').value='';
+      document.getElementById('peopleCount').value='';
+      document.getElementById('nextOpen').value='';
+      document.getElementById('isOpenNow').value='';
+
+      render();
+    });
+
+    tbody.addEventListener('click', (e) => {
+      const id = e.target.dataset && +e.target.dataset.id;
+      if(!id) return;
+      if(e.target.classList.contains('delBtn')){
+        shops = shops.filter(s => s.id !== id);
+        render();
+      }
+      if(e.target.classList.contains('editBtn')){
+        const s = shops.find(x => x.id === id);
+        if(!s) return;
+        document.getElementById('shopName').value = s.name;
+        document.getElementById('peopleCount').value = s.people;
+        document.getElementById('nextOpen').value = s.nextOpen ? s.nextOpen : '';
+        document.getElementById('isOpenNow').value = s.forceStatus || '';
+      }
+    });
+
+    // Live clock + initial render
+    updateNowLabel(); render();
+    setInterval(() => { updateNowLabel(); render(); }, 30 * 1000);
+  </script></body>
+</html>
