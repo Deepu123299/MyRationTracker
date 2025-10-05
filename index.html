@@ -29,6 +29,40 @@ th{font-size:.85rem;color:var(--muted)}
 </head>
 <body>
   <script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+      // 1️⃣ Admin password prompt
+      let role = '';
+      const password = prompt('Enter admin password');
+      if(password === '1234'){
+        role = 'admin';
+      } else {
+        role = 'viewer';
+      }
+
+      // 2️⃣ Example: show/hide Edit/Delete buttons
+      if(role === 'admin'){
+        console.log('Admin can edit/delete');
+        // Your code to render buttons for admin
+      }
+
+      // 3️⃣ Add / Update button logic
+      const addBtn = document.getElementById('addBtn');
+      addBtn.addEventListener('click', function() {
+        alert('Add button clicked! Role: ' + role);
+        // Your add/update code here
+      });
+
+      // 4️⃣ Refresh button logic
+      const refreshBtn = document.getElementById('refreshBtn');
+      refreshBtn.addEventListener('click', function() {
+        alert('Refresh clicked! Role: ' + role);
+        // Your refresh code here
+      });
+
+    });
+  </script>
+  <script>
     // Set admin role
     let role = '';
     const password = prompt('Enter admin password');
