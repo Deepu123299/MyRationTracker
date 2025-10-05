@@ -28,6 +28,26 @@ th{font-size:.85rem;color:var(--muted)}
 </style>
 </head>
 <body>
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+
+  // Check if role is already saved
+  let role = localStorage.getItem('role') || '';
+  if(!role) {
+    const password = prompt('Enter admin password');
+    if(password === '1234'){ role = 'admin'; } else { role = 'viewer'; }
+    localStorage.setItem('role', role); // save for next refresh
+  }
+
+  console.log('Role is', role);
+
+  const refreshBtn = document.getElementById('refreshBtn');
+  refreshBtn.addEventListener('click', function() {
+    // Instead of page reload, just call render/update functions
+    alert('Refresh clicked! Role: ' + role);
+  });
+
+});</script>
   <button id="refreshBtn">Refresh</button>
   <button id="addBtn">Add / Update</button>
 
