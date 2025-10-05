@@ -28,6 +28,7 @@ th{font-size:.85rem;color:var(--muted)}
 </style>
 </head>
 <body>
+
 <div class="container">
   <header>
     <h1>Ration Shop Tracker</h1>
@@ -76,148 +77,141 @@ th{font-size:.85rem;color:var(--muted)}
         </select>
         <button id="addBtn">Add / Update</button>
       </div>
-      <div class="muted" style="margin-top:.5rem">Tip: Admin can add new shops. Owners can edit only their shop.</div>
+      <div class="muted" style="margin-top:.5rem">Admin can add new shops; Owners can edit their shop.</div>
     </div>
   </section>
 </div>
 
 <script>
-let shops = [
-  { id: 1, name: 'Muthu Ration Shop', people: 12, nextOpen: '2025-10-02T09:30', forceStatus: '' },
-  { id: 2, name: 'Kumar Provision', people: 4, nextOpen: '2025-10-03T10:00', forceStatus: '' },
-  { id: 3, name: 'Lakshmi Store', people: 0, nextOpen: '2025-10-02T00:00', forceStatus: 'open' }
-];
+document.addEventListener('DOMContentLoaded', function() {
 
-// Role system
-let role = prompt("Enter role: admin / owner").toLowerCase();
-let ownerShopName = '';
-if(role === 'owner'){
-  ownerShopName = prompt("Enter your shop name exactly");
-  if(!shops.find(s => s.name.toLowerCase() === ownerShopName.toLowerCase())){
-    alert("Shop not found! Refresh and try again.");
-    role = 'viewer';
-  }
-}
+  // Load shops from localStorage or start empty
+  let shops = JSON.parse(localStorage.getItem('shops')) || [];
 
-const tbody = document.querySelector('#shopsTable tbody');
-const nowLabel = document.getElementById('nowLabel');
+  // Preset admin role for Netlify/GitHub deployment
+  let role = 'admin';
+  let ownerShopName = '';
 
-function updateNowLabel(){
-  const now = new Date();
-  nowLabel.textContent = now.toLocaleString();
-}
+  const tbody = document.querySelector('#shopsTable tbody');
+  const nowLabel = document.getElementById('nowLabel');
 
-function computeStatus(shop){
-  if(shop.forceStatus === 'open') return { text: 'Open', open: true };
-  if(shop.forceStatus === 'closed') return { text: 'Closed', open: false };
-  const now = new Date();
-  if(!shop.nextOpen) return { text: 'Unknown', open: false };
-  const next = new Date(shop.nextOpen);
-  return next.getTime() <= now.getTime() ? { text:'Open', open:true } : { text:'Will open ' + next.toLocaleString(), open:false };
-}
-
-function render(){
-  tbody.innerHTML = '';
-  const search = document.getElementById('searchInput').value.toLowerCase();
-  const filter = document.getElementById('filterStatus').value;
-
-  shops.forEach(shop => {
-    if(search && !shop.name.toLowerCase().includes(search)) return;
-    const status = computeStatus(shop);
-    if(filter === 'open' && !status.open) return;
-    if(filter === 'closed' && status.open) return;
-
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${escapeHtml(shop.name)}</td>
-      <td>${shop.people}</td>
-      <td>${shop.nextOpen ? new Date(shop.nextOpen).toLocaleString() : '<span class="muted">Not set</span>'}</td>
-      <td><span class="status ${status.open ? 'open' : 'closed'}">${escapeHtml(status.text)}</span></td>
-      <td>
-        ${role === 'admin' || (role === 'owner' && shop.name.toLowerCase() === ownerShopName.toLowerCase()) 
-          ? `<button data-id="${shop.id}" class="editBtn">Edit</button>
-             <button data-id="${shop.id}" class="delBtn">Delete</button>` 
-          : '<span class="muted">No actions</span>'}
-      </td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
-
-function escapeHtml(s){
-  return String(s).replace(/[&<>"']/g, function(ch){
-    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;'}[ch];
-  });
-}
-
-// Add / Update
-document.getElementById('addBtn').addEventListener('click', () => {
-  const name = document.getElementById('shopName').value.trim();
-  const people = parseInt(document.getElementById('peopleCount').value || '0', 10);
-  const nextOpen = document.getElementById('nextOpen').value || '';
-  const force = document.getElementById('isOpenNow').value || '';
-
-  if(!name){ alert('Enter shop name'); return; }
-
-  if(role === 'owner' && name.toLowerCase() !== ownerShopName.toLowerCase()){
-    alert("Owners can edit only their own shop!");
-    return;
+  function updateNowLabel(){
+    const now = new Date();
+    nowLabel.textContent = now.toLocaleString();
   }
 
-  const existing = shops.find(s => s.name.toLowerCase() === name.toLowerCase());
-  if(existing){
-    existing.people = people;
-    existing.nextOpen = nextOpen;
-    if(role === 'admin') existing.forceStatus = force;
-  } else {
-    if(role !== 'admin'){ alert("Only admin can add new shops"); return; }
-    shops.push({ id: Date.now(), name, people, nextOpen, forceStatus: force });
+  // Compute open/closed status with countdown
+  function computeStatus(shop){
+    if(shop.forceStatus === 'open') return { text: 'Open', open: true };
+    if(shop.forceStatus === 'closed') return { text: 'Closed', open: false };
+    if(!shop.nextOpen) return { text: 'Unknown', open: false };
+
+    const now = new Date();
+    const next = new Date(shop.nextOpen);
+    if(next.getTime() <= now.getTime()) return { text:'Open', open:true };
+
+    const diffMs = next - now;
+    const hours = Math.floor(diffMs / 3600000);
+    const minutes = Math.floor((diffMs % 3600000)/60000);
+    const seconds = Math.floor((diffMs % 60000)/1000);
+    const countdown = ${hours>0?hours+'h ':'')}${minutes>0?minutes+'m ':'')}${seconds}s;
+    return { text:'Will open in ' + countdown, open:false };
   }
 
-  document.getElementById('shopName').value='';
-  document.getElementById('peopleCount').value='';
-  document.getElementById('nextOpen').value='';
-  document.getElementById('isOpenNow').value='';
+  function saveShops(){
+    localStorage.setItem('shops', JSON.stringify(shops));
+  }
 
-  render();
-});
+  function render(){
+    tbody.innerHTML = '';
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    const filter = document.getElementById('filterStatus').value;
 
-// Edit / Delete
-tbody.addEventListener('click', (e) => {
-  const id = e.target.dataset && +e.target.dataset.id;
-  if(!id) return;
-  const shop = shops.find(s => s.id === id);
-  if(!shop) return;
+    shops.forEach(shop => {
+      if(search && !shop.name.toLowerCase().includes(search)) return;
+      const status = computeStatus(shop);
+      if(filter === 'open' && !status.open) return;
+      if(filter === 'closed' && status.open) return;
 
-  if(e.target.classList.contains('delBtn')){
-    if(role !== 'admin' && !(role==='owner' && shop.name.toLowerCase()===ownerShopName.toLowerCase())){
-      alert("You cannot delete this shop");
-      return;
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${escapeHtml(shop.name)}</td>
+        <td>${shop.people}</td>
+        <td>${shop.nextOpen ? new Date(shop.nextOpen).toLocaleString() : '<span class="muted">Not set</span>'}</td>
+        <td><span class="status ${status.open ? 'open' : 'closed'}">${escapeHtml(status.text)}</span></td>
+        <td>
+          <button data-id="${shop.id}" class="editBtn">Edit</button>
+          <button data-id="${shop.id}" class="delBtn">Delete</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(ch){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;'}[ch];
+    });
+  }
+
+  // Add / Update shop
+  document.getElementById('addBtn').addEventListener('click', () => {
+    const name = document.getElementById('shopName').value.trim();
+    const people = parseInt(document.getElementById('peopleCount').value || '0', 10);
+    const nextOpen = document.getElementById('nextOpen').value || '';
+    const force = document.getElementById('isOpenNow').value || '';
+
+    if(!name){ alert('Enter shop name'); return; }
+
+    const existing = shops.find(s => s.name.toLowerCase() === name.toLowerCase());
+    if(existing){
+      existing.people = people;
+      existing.nextOpen = nextOpen;
+      existing.forceStatus = force;
+    } else {
+      if(role !== 'admin'){ alert("Only admin can add new shops"); return; }
+      shops.push({ id: Date.now(), name, people, nextOpen, forceStatus: force });
     }
-    shops = shops.filter(s => s.id !== id);
+
+    saveShops();
+    document.getElementById('shopName').value='';
+    document.getElementById('peopleCount').value='';
+    document.getElementById('nextOpen').value='';
+    document.getElementById('isOpenNow').value='';
     render();
-  }
+  });
 
-  if(e.target.classList.contains('editBtn')){
-    if(role !== 'admin' && !(role==='owner' && shop.name.toLowerCase()===ownerShopName.toLowerCase())){
-      alert("You cannot edit this shop");
-      return;
+  // Edit / Delete
+  tbody.addEventListener('click', (e) => {
+    const id = e.target.dataset && +e.target.dataset.id;
+    if(!id) return;
+    const shop = shops.find(s => s.id === id);
+    if(!shop) return;
+
+    if(e.target.classList.contains('delBtn')){
+      shops = shops.filter(s => s.id !== id);
+      saveShops();
+      render();
     }
-    document.getElementById('shopName').value = shop.name;
-    document.getElementById('peopleCount').value = shop.people;
-    document.getElementById('nextOpen').value = shop.nextOpen || '';
-    document.getElementById('isOpenNow').value = shop.forceStatus || '';
-  }
+
+    if(e.target.classList.contains('editBtn')){
+      document.getElementById('shopName').value = shop.name;
+      document.getElementById('peopleCount').value = shop.people;
+      document.getElementById('nextOpen').value = shop.nextOpen || '';
+      document.getElementById('isOpenNow').value = shop.forceStatus || '';
+    }
+  });
+
+  // Refresh, search, filter
+  document.getElementById('refreshBtn').addEventListener('click', () => { updateNowLabel(); render(); });
+  document.getElementById('searchInput').addEventListener('input', render);
+  document.getElementById('filterStatus').addEventListener('change', render);
+
+  // Live clock + countdown
+  updateNowLabel(); render();
+  setInterval(() => { updateNowLabel(); render(); }, 1000);
+
 });
-
-// Refresh, search, filter
-document.getElementById('refreshBtn').addEventListener('click', () => { updateNowLabel(); render(); });
-document.getElementById('searchInput').addEventListener('input', render);
-document.getElementById('filterStatus').addEventListener('change', render);
-
-// Live clock
-updateNowLabel(); render();
-setInterval(() => { updateNowLabel(); render(); }, 30000);
 </script>
 </body>
 </html>
