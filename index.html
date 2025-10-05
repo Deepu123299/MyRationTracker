@@ -1,320 +1,229 @@
-<!DOCTYPE html>
+4<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ration Shop Tracker</title>
-<style>
-:root{--bg:#f6f8fb;--card:#ffffff;--muted:#6b7280;--accent:#0ea5a4}
-body{font-family:Arial, sans-serif; background:var(--bg); margin:0; padding:2rem}
-.container{max-width:980px;margin:0 auto}
-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
-h1{font-size:1.25rem;margin:0}
-.card{background:var(--card);border-radius:12px;padding:1rem;box-shadow:0 6px 18px rgba(9,10,11,0.06)}
-.controls{display:flex;gap:.5rem;align-items:center}
-input[type=text], input[type=number], input[type=datetime-local], select{padding:.5rem .6rem;border-radius:8px;border:1px solid #e6e9ef}
-button{padding:.5rem .75rem;border-radius:8px;border:0;background:var(--accent);color:#fff;cursor:pointer}
-table{width:100%;border-collapse:collapse;margin-top:1rem}
-th,td{padding:.6rem .5rem;text-align:left;border-bottom:1px solid #eef2f6}
-th{font-size:.85rem;color:var(--muted)}
-.status{display:inline-block;padding:.25rem .5rem;border-radius:999px;font-weight:600;font-size:.8rem}
-.open{background:rgba(16,185,129,0.12);color:#059669}
-.closed{background:rgba(239,68,68,0.08);color:#dc2626}
-.muted{color:var(--muted);font-size:.9rem}
-.form-row{display:flex;gap:.5rem;margin-top:.75rem}
-.small{width:110px}
-.right{margin-left:auto}
-@media (max-width:720px){.form-row{flex-direction:column}.small{width:100%}.controls{flex-direction:column;align-items:stretch}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ration Shop Status Dashboard - Single File</title>
+    <style>
+        /* --- CSS STYLES --- */
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f9; }
+        .dashboard { max-width: 600px; margin: 30px auto; padding: 25px; border: 1px solid #ddd; border-radius: 10px; background-color: #fff; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #333; margin-bottom: 20px; }
+        .status-item { padding: 12px 0; border-bottom: 1px dashed #eee; display: flex; justify-content: space-between; align-items: center; }
+        .status-item:last-child { border-bottom: none; }
+        .user-controls { margin-top: 25px; padding: 15px; border: 1px solid #007bff; border-radius: 5px; background-color: #eaf4ff; }
+        .login-status { font-weight: bold; margin-bottom: 15px; color: #0056b3; }
+        .editable input, .editable select { padding: 5px; border: 1px solid #ccc; border-radius: 3px; width: 150px; }
+        .edit-button, .save-button { padding: 5px 10px; cursor: pointer; border: none; border-radius: 4px; margin-left: 10px; font-weight: bold; }
+        .edit-button { background-color: #007bff; color: white; }
+        .save-button { background-color: #28a745; color: white; }
+        .control-group { display: flex; align-items: center; }
+    </style>
 </head>
 <body>
-  <script>
-  document.addEventListener('DOMContentLoaded', function() {
 
-  // Check if role is already saved
-  let role = localStorage.getItem('role') || '';
-  if(!role) {
-    const password = prompt('Enter admin password');
-    if(password === '1234'){ role = 'admin'; } else { role = 'viewer'; }
-    localStorage.setItem('role', role); // save for next refresh
-  }
+    <div class="dashboard">
+        <h1>Local Ration Shop Status</h1>
 
-  console.log('Role is', role);
+        <div id="shop-data-container">
+            </div>
 
-  const refreshBtn = document.getElementById('refreshBtn');
-  refreshBtn.addEventListener('click', function() {
-    // Instead of page reload, just call render/update functions
-    alert('Refresh clicked! Role: ' + role);
-  });
-
-});</script>
-  <button id="refreshBtn">Refresh</button>
-  <button id="addBtn">Add / Update</button>
-
-  <script>
-  document.addEventListener('DOMContentLoaded', function() {
-
-    // Admin password prompt
-    let role = '';
-    const password = prompt('Enter admin password');
-    if(password === '1234'){ role = 'admin'; } else { role = 'viewer'; }
-
-    // Reference buttons
-    const refreshBtn = document.getElementById('refreshBtn');
-    const addBtn = document.getElementById('addBtn');
-
-    // Refresh button
-    refreshBtn.addEventListener('click', function() {
-      alert('Refresh clicked! Role: ' + role);
-      // Here you can call your render() or updateNowLabel() functions
-    });
-
-    // Add button
-    addBtn.addEventListener('click', function() {
-      alert('Add clicked! Role: ' + role);
-      // Here you can add your shop add/update logic
-    });
-
-  });
-  </script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-
-      // 1️⃣ Admin password prompt
-      let role = '';
-      const password = prompt('Enter admin password');
-      if(password === '1234'){
-        role = 'admin';
-      } else {
-        role = 'viewer';
-      }
-
-      // 2️⃣ Example: show/hide Edit/Delete buttons
-      if(role === 'admin'){
-        console.log('Admin can edit/delete');
-        // Your code to render buttons for admin
-      }
-
-      // 3️⃣ Add / Update button logic
-      const addBtn = document.getElementById('addBtn');
-      addBtn.addEventListener('click', function() {
-        alert('Add button clicked! Role: ' + role);
-        // Your add/update code here
-      });
-
-      // 4️⃣ Refresh button logic
-      const refreshBtn = document.getElementById('refreshBtn');
-      refreshBtn.addEventListener('click', function() {
-        alert('Refresh clicked! Role: ' + role);
-        // Your refresh code here
-      });
-
-    });
-  </script>
-  <script>
-    // Set admin role
-    let role = '';
-    const password = prompt('Enter admin password');
-    if(password === '1234'){
-      role = 'admin';
-    } else {
-      role = 'viewer';
-    }
-
-    // Example: show Edit/Delete buttons only for admin
-    if(role === 'admin'){
-      // Your JS code to render or enable Edit/Delete buttons
-      console.log('Admin can edit/delete');
-    } else {
-      console.log('Not admin, hide buttons');
-    }
-
-    // Your other JS logic, e.g., rendering table, Add button
-  </script>
-
-<div class="container">
-  <header>
-    <h1>Ration Shop Tracker</h1>
-    <div class="muted">Local time: <span id="nowLabel">--:--</span></div>
-  </header>
-  <section class="card">
-    <div style="display:flex;gap:.75rem;align-items:center;flex-wrap:wrap">
-      <div class="controls">
-        <input id="searchInput" type="text" placeholder="Search shop name..." />
-        <select id="filterStatus">
-          <option value="all">All</option>
-          <option value="open">Open now</option>
-          <option value="closed">Closed now</option>
-        </select>
-      </div>
-      <div class="right">
-        <button id="refreshBtn">Refresh</button>
-      </div>
+        <div class="user-controls">
+            <h2>User Access Control</h2>
+            <div class="login-status" id="login-status">Logged in as: User</div>
+            <button onclick="loginAs('user')">Login as User</button>
+            <button onclick="loginAs('shopowner')">Login as Shop Owner</button>
+            <button onclick="loginAs('admin')">Login as Admin</button>
+            <p style="margin-top: 10px; font-size: 0.9em; color: #666;">*Editing is enabled only for Admin and Shop Owner roles.</p>
+        </div>
     </div>
 
-    <table id="shopsTable" aria-label="Ration shops">
-      <thead>
-        <tr>
-          <th>Shop name</th>
-          <th>People waiting</th>
-          <th>Next open date/time</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+    <script>
+        // =======================================================
+        // 1. Data Model Object (DMO) Array
+        // =======================================================
+        const DMO_ShopData = [
+            {
+                name: "Shop Status",
+                key: "is_open",
+                type: "boolean",
+                value: true, // true for Open, false for Closed
+                editable_by: ["admin", "shopowner"]
+            },
+            {
+                name: "Opening Time (Morning)",
+                key: "morning_open",
+                type: "time",
+                value: "08:30",
+                editable_by: ["admin", "shopowner"]
+            },
+            {
+                name: "Closing Time (Morning)",
+                key: "morning_close",
+                type: "time",
+                value: "12:30",
+                editable_by: ["admin", "shopowner"]
+            },
+            {
+                name: "Opening Time (Evening)",
+                key: "evening_open",
+                type: "time",
+                value: "15:00",
+                editable_by: ["admin", "shopowner"]
+            },
+            {
+                name: "Closing Time (Evening)",
+                key: "evening_close",
+                type: "time",
+                value: "19:00",
+                editable_by: ["admin", "shopowner"]
+            },
+            {
+                name: "Current Queue Length (People)",
+                key: "queue_length",
+                type: "number",
+                value: 7, // Placeholder for the number of people
+                editable_by: ["admin", "shopowner"]
+            },
+            {
+                name: "Last Updated",
+                key: "last_updated",
+                type: "string",
+                value: new Date().toLocaleString(),
+                editable_by: [] // Not directly editable in this UI
+            },
+        ];
 
-    <hr style="margin-top:1rem;border:none;border-top:1px solid #f1f3f6" />
 
-    <div style="margin-top:.75rem">
-      <strong>Add / Edit shop</strong>
-      <div class="form-row">
-        <input id="shopName" type="text" placeholder="Shop name" />
-        <input id="peopleCount" type="number" min="0" placeholder="People waiting" class="small" />
-        <input id="nextOpen" type="datetime-local" class="small" />
-        <select id="isOpenNow" class="small">
-          <option value="">Auto (based on schedule)</option>
-          <option value="open">Force Open</option>
-          <option value="closed">Force Closed</option>
-        </select>
-        <button id="addBtn">Add / Update</button>
-      </div>
-      <div class="muted" style="margin-top:.5rem">Admin can add new shops; Owners can edit their shop.</div>
-    </div>
-  </section>
-</div>
+        // =======================================================
+        // 2. Application Logic
+        // =======================================================
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
+        let currentUserRole = 'user'; // Default role is 'user'
+        const shopDataContainer = document.getElementById('shop-data-container');
+        const loginStatusElement = document.getElementById('login-status');
 
-  // Load shops from localStorage or start empty
-  let shops = JSON.parse(localStorage.getItem('shops')) || [];
+        /**
+         * Updates the UI based on the current user role and DMO.
+         */
+        function renderData() {
+            shopDataContainer.innerHTML = ''; // Clear previous content
 
-  // Preset admin role for Netlify/GitHub deployment
-  let role = 'admin';
-  let ownerShopName = '';
+            DMO_ShopData.forEach((item, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'status-item';
 
-  const tbody = document.querySelector('#shopsTable tbody');
-  const nowLabel = document.getElementById('nowLabel');
+                const isEditable = item.editable_by.includes(currentUserRole);
 
-  function updateNowLabel(){
-    const now = new Date();
-    nowLabel.textContent = now.toLocaleString();
-  }
+                let valueDisplay;
+                let inputField = '';
 
-  // Compute open/closed status with countdown
-  function computeStatus(shop){
-    if(shop.forceStatus === 'open') return { text: 'Open', open: true };
-    if(shop.forceStatus === 'closed') return { text: 'Closed', open: false };
-    if(!shop.nextOpen) return { text: 'Unknown', open: false };
+                // Determine the display value and create input field if editable
+                if (item.key === 'is_open') {
+                    valueDisplay = item.value ? '<span style="color: green; font-size: 1.1em;">OPEN</span>' : '<span style="color: red; font-size: 1.1em;">CLOSED</span>';
+                    if (isEditable) {
+                        inputField = `
+                            <select id="${item.key}-${index}" disabled>
+                                <option value="true" ${item.value ? 'selected' : ''}>OPEN</option>
+                                <option value="false" ${!item.value ? 'selected' : ''}>CLOSED</option>
+                            </select>
+                        `;
+                    }
+                } else {
+                    valueDisplay = item.value;
+                    if (isEditable) {
+                        const inputType = item.type === 'number' ? 'number' : item.type;
+                        inputField = <input type="${inputType}" id="${item.key}-${index}" value="${item.value}" ${item.type === 'string' ? 'size="25"' : ''} disabled>;
+                    }
+                }
 
-    const now = new Date();
-    const next = new Date(shop.nextOpen);
-    if(next.getTime() <= now.getTime()) return { text:'Open', open:true };
+                itemDiv.innerHTML = `
+                    <span>${item.name}: <strong>${valueDisplay}</strong></span>
+                    <div class="control-group">
+                        ${isEditable ? <span class="editable">${inputField}</span> : ''}
+                        ${isEditable ? <button class="edit-button" data-index="${index}" onclick="toggleEdit(${index})">Edit</button> : ''}
+                        ${isEditable ? <button class="save-button" data-index="${index}" onclick="saveData(${index})" style="display: none;">Save</button> : ''}
+                    </div>
+                `;
 
-    const diffMs = next - now;
-    const hours = Math.floor(diffMs / 3600000);
-    const minutes = Math.floor((diffMs % 3600000)/60000);
-    const seconds = Math.floor((diffMs % 60000)/1000);
-    const countdown = ${hours>0?hours+'h ':'')}${minutes>0?minutes+'m ':'')}${seconds}s;
-    return { text:'Will open in ' + countdown, open:false };
-  }
+                shopDataContainer.appendChild(itemDiv);
+            });
 
-  function saveShops(){
-    localStorage.setItem('shops', JSON.stringify(shops));
-  }
+            // Update login status
+            loginStatusElement.textContent = Logged in as: ${currentUserRole.toUpperCase()};
+        }
 
-  function render(){
-    tbody.innerHTML = '';
-    const search = document.getElementById('searchInput').value.toLowerCase();
-    const filter = document.getElementById('filterStatus').value;
+        /**
+         * Toggles the disabled state of the input field for editing.
+         * @param {number} index - Index of the item in DMO_ShopData.
+         */
+        function toggleEdit(index) {
+            const item = DMO_ShopData[index];
+            const inputElement = document.getElementById(${item.key}-${index});
+            const editButton = document.querySelector(.edit-button[data-index="${index}"]);
+            const saveButton = document.querySelector(.save-button[data-index="${index}"]);
 
-    shops.forEach(shop => {
-      if(search && !shop.name.toLowerCase().includes(search)) return;
-      const status = computeStatus(shop);
-      if(filter === 'open' && !status.open) return;
-      if(filter === 'closed' && status.open) return;
+            if (inputElement.disabled) {
+                inputElement.disabled = false;
+                editButton.style.display = 'none';
+                saveButton.style.display = 'inline-block';
+                inputElement.focus();
+            } else {
+                // This branch is for cancelling an edit, but for simplicity, we focus on saving.
+                inputElement.disabled = true;
+                editButton.style.display = 'inline-block';
+                saveButton.style.display = 'none';
+            }
+        }
 
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>${escapeHtml(shop.name)}</td>
-        <td>${shop.people}</td>
-        <td>${shop.nextOpen ? new Date(shop.nextOpen).toLocaleString() : '<span class="muted">Not set</span>'}</td>
-        <td><span class="status ${status.open ? 'open' : 'closed'}">${escapeHtml(status.text)}</span></td>
-        <td>
-          <button data-id="${shop.id}" class="editBtn">Edit</button>
-          <button data-id="${shop.id}" class="delBtn">Delete</button>
-        </td>
-      `;
-      tbody.appendChild(tr);
-    });
-  }
+        /**
+         * Saves the new value from the input field to the DMO.
+         * @param {number} index - Index of the item in DMO_ShopData.
+         */
+        function saveData(index) {
+            const item = DMO_ShopData[index];
+            const inputElement = document.getElementById(${item.key}-${index});
 
-  function escapeHtml(s){
-    return String(s).replace(/[&<>"']/g, function(ch){
-      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;'}[ch];
-    });
-  }
+            let newValue = inputElement.value;
 
-  // Add / Update shop
-  document.getElementById('addBtn').addEventListener('click', () => {
-    const name = document.getElementById('shopName').value.trim();
-    const people = parseInt(document.getElementById('peopleCount').value || '0', 10);
-    const nextOpen = document.getElementById('nextOpen').value || '';
-    const force = document.getElementById('isOpenNow').value || '';
+            // Type conversion and validation
+            if (item.type === 'boolean') {
+                newValue = newValue === 'true';
+            } else if (item.type === 'number') {
+                newValue = parseInt(newValue, 10);
+                if (isNaN(newValue) || newValue < 0) {
+                    alert("Invalid number entered for Queue Length. Must be a non-negative integer.");
+                    return;
+                }
+            }
 
-    if(!name){ alert('Enter shop name'); return; }
+            // Update the DMO and last updated time
+            item.value = newValue;
+            DMO_ShopData.find(d => d.key === 'last_updated').value = new Date().toLocaleString();
 
-    const existing = shops.find(s => s.name.toLowerCase() === name.toLowerCase());
-    if(existing){
-      existing.people = people;
-      existing.nextOpen = nextOpen;
-      existing.forceStatus = force;
-    } else {
-      if(role !== 'admin'){ alert("Only admin can add new shops"); return; }
-      shops.push({ id: Date.now(), name, people, nextOpen, forceStatus: force });
-    }
+            // Re-render the UI to reflect changes and disable inputs
+            renderData();
+        }
 
-    saveShops();
-    document.getElementById('shopName').value='';
-    document.getElementById('peopleCount').value='';
-    document.getElementById('nextOpen').value='';
-    document.getElementById('isOpenNow').value='';
-    render();
-  });
+        /**
+         * Changes the current user role and re-renders the data.
+         * @param {string} role - 'user', 'shopowner', or 'admin'.
+         */
+        window.loginAs = function(role) {
+            currentUserRole = role;
+            renderData();
+        }
+        
+        // Expose the functions to the global scope for HTML event handlers
+        window.toggleEdit = toggleEdit;
+        window.saveData = saveData;
 
-  // Edit / Delete
-  tbody.addEventListener('click', (e) => {
-    const id = e.target.dataset && +e.target.dataset.id;
-    if(!id) return;
-    const shop = shops.find(s => s.id === id);
-    if(!shop) return;
 
-    if(e.target.classList.contains('delBtn')){
-      shops = shops.filter(s => s.id !== id);
-      saveShops();
-      render();
-    }
+        // Initial render when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            renderData();
+        });
 
-    if(e.target.classList.contains('editBtn')){
-      document.getElementById('shopName').value = shop.name;
-      document.getElementById('peopleCount').value = shop.people;
-      document.getElementById('nextOpen').value = shop.nextOpen || '';
-      document.getElementById('isOpenNow').value = shop.forceStatus || '';
-    }
-  });
-
-  // Refresh, search, filter
-  document.getElementById('refreshBtn').addEventListener('click', () => { updateNowLabel(); render(); });
-  document.getElementById('searchInput').addEventListener('input', render);
-  document.getElementById('filterStatus').addEventListener('change', render);
-
-  // Live clock + countdown
-  updateNowLabel(); render();
-  setInterval(() => { updateNowLabel(); render(); }, 1000);
-
-});
-</script>
+    </script>
 </body>
 </html>
