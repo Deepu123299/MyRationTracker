@@ -28,6 +28,35 @@ th{font-size:.85rem;color:var(--muted)}
 </style>
 </head>
 <body>
+  <button id="refreshBtn">Refresh</button>
+  <button id="addBtn">Add / Update</button>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+
+    // Admin password prompt
+    let role = '';
+    const password = prompt('Enter admin password');
+    if(password === '1234'){ role = 'admin'; } else { role = 'viewer'; }
+
+    // Reference buttons
+    const refreshBtn = document.getElementById('refreshBtn');
+    const addBtn = document.getElementById('addBtn');
+
+    // Refresh button
+    refreshBtn.addEventListener('click', function() {
+      alert('Refresh clicked! Role: ' + role);
+      // Here you can call your render() or updateNowLabel() functions
+    });
+
+    // Add button
+    addBtn.addEventListener('click', function() {
+      alert('Add clicked! Role: ' + role);
+      // Here you can add your shop add/update logic
+    });
+
+  });
+  </script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
 
